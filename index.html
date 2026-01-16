@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare Hospital Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo"><h2><i class="fa-solid fa-heart-pulse"></i> MediCare</h2></div>
+            <ul>
+                <li onclick="showSection('dashboard')" class="active"><i class="fa-solid fa-house"></i> Dashboard</li>
+                <li onclick="showSection('doctors')"><i class="fa-solid fa-user-doctor"></i> Doctors</li>
+                <li onclick="showSection('patients')"><i class="fa-solid fa-bed-pulse"></i> Patients</li>
+                <li onclick="showSection('appointments')"><i class="fa-solid fa-calendar-check"></i> Appointments</li>
+                <li onclick="showSection('bed-manager')"><i class="fa-solid fa-bed"></i> Bed Manager</li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            
+            <section id="dashboard" class="section">
+                <header><h1>Dashboard Overview</h1></header>
+                
+                <div class="cards">
+                    <div class="card">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        <h3>Doctors</h3>
+                        <p id="total-doctors">0</p>
+                    </div>
+                    <div class="card emergency-card">
+                        <i class="fa-solid fa-truck-medical"></i>
+                        <h3>Emergencies</h3>
+                        <p id="total-emergencies">0</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <h3>Appointments</h3>
+                        <p id="total-appointments">0</p>
+                    </div>
+                    <div class="card">
+                        <i class="fa-solid fa-bed"></i>
+                        <h3>Beds Available</h3>
+                        <p id="beds-available-count">0 / 20</p>
+                    </div>
+                </div>
+
+                <div class="emergency-section">
+                    <h2><i class="fa-solid fa-bell"></i> Emergency Response</h2>
+                    <button class="btn-emergency-big" onclick="addEmergency()">
+                        <i class="fa-solid fa-plus"></i> REPORT NEW EMERGENCY
+                    </button>
+                    
+                    <div class="table-container">
+                        <h3>Active Emergency Cases</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Time Reported</th>
+                                    <th>Priority</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="emergency-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-extras">
+                    <div class="facility-box">
+                        <h2><i class="fa-solid fa-hospital"></i> Patient Facilities</h2>
+                        <ul class="facility-list">
+                            <li><i class="fa-solid fa-check"></i> 24/7 Emergency Services</li>
+                            <li><i class="fa-solid fa-check"></i> In-house Pharmacy</li>
+                            <li><i class="fa-solid fa-check"></i> Free Patient WiFi</li>
+                            <li><i class="fa-solid fa-check"></i> Cafeteria & Lounge</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="doctors" class="section" style="display:none;">
+                <h1>Manage Doctors</h1>
+                <div class="form-container">
+                    <h3>Add New Doctor</h3>
+                    <form id="add-doctor-form">
+                        <input type="text" id="new-doc-name" placeholder="Doctor Name" required>
+                        <input type="text" id="new-doc-spec" placeholder="Specialization" required>
+                        
+                        <div style="display:flex; gap:10px; grid-column: span 2;">
+                            <input type="number" id="new-doc-exp" placeholder="Experience (Years)" required style="flex: 1;">
+                            <input type="text" id="new-doc-img" placeholder="Photo URL (Optional)" style="flex: 2;">
+                        </div>
+
+                        <div style="display:flex; gap:10px; grid-column: span 2;">
+                            <input type="text" id="new-doc-shift" placeholder="Shift (e.g. 9 AM - 5 PM)" required>
+                            <input type="text" id="new-doc-break" placeholder="Break Time" required>
+                        </div>
+                        
+                        <input type="text" id="new-doc-address" placeholder="Residential Address" class="full-width" required>
+
+                        <button type="submit" class="btn-submit full-width">Add Doctor</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Profile</th> <th>Name & Address</th> <th>Spec & Exp</th>     <th>Shift</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctors-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="patients" class="section" style="display:none;">
+                <h1>Patient Records</h1>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Gender</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patients-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="appointments" class="section" style="display:none;">
+                <h1>Book Appointment</h1>
+                <div class="form-container">
+                    <form id="appointment-form">
+                        <input type="text" id="patient-name" placeholder="Patient Name" required>
+                        <input type="tel" id="patient-phone" placeholder="Phone Number" required>
+                        
+                        <select id="patient-gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        
+                        <select id="doctor-select" required>
+                            <option value="">Select Doctor</option>
+                        </select>
+                        
+                        <div style="display: flex; gap: 10px; grid-column: span 2;">
+                            <input type="date" id="app-date" required style="flex:1;">
+                            <input type="time" id="app-time" required style="flex:1;">
+                            <input type="number" id="app-fees" placeholder="Fees ($)" required style="flex:1;">
+                        </div>
+
+                        <input type="text" id="patient-address" placeholder="Address" class="full-width" required>
+                        <button type="submit" class="btn-submit full-width">Book Now</button>
+                    </form>
+                </div>
+                
+                <h2>Upcoming Appointments</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Date & Time</th>
+                                <th>Fees</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointments-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="bed-manager" class="section" style="display:none;">
+                <h1>Hospital Ward Map</h1>
+                <p>Click on a bed to toggle its status (Available / Occupied).</p>
+                <div class="bed-grid" id="bed-grid-container"></div>
+            </section>
+
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
